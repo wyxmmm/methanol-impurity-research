@@ -1,0 +1,35 @@
+# Source papers and private working files
+*.pdf
+private/
+downloads/
+
+# Credentials and local configuration
+.env
+.env.*
+*.key
+*.pem
+credentials.json
+token.json
+
+# Python and notebooks
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary and generated files
+tmp/
+work/
+dist/
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
