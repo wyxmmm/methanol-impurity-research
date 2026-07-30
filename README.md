@@ -1,6 +1,6 @@
 # Methanol Impurity Research
 
-This repository contains my ongoing AP Research project on how impurities in hydrogen, carbon dioxide, and synthesis-gas feeds affect methanol synthesis.
+This repository contains my ongoing Research project on how impurities in hydrogen, carbon dioxide, and synthesis-gas feeds affect methanol synthesis.
 
 ## Research question
 
