@@ -1,0 +1,130 @@
+{
+  "spec_version": "1.0.0",
+  "date": "2026-07-29",
+  "primary_question": "For a Cu/ZnO/Al2O3 methanol-synthesis catalyst directly exposed to H2S in the synthesis feed, what fraction of clean-feed methanol activity remains after a defined exposure under defined operating conditions?",
+  "core_scope": {
+    "impurity_species": "H2S",
+    "catalyst_family": "Cu/ZnO/Al2O3",
+    "reaction": "methanol synthesis",
+    "exposure_mode": "continuous_cofeed",
+    "guard_bed": false,
+    "mixed_impurities": false
+  },
+  "targets": {
+    "activity_retention_fraction": {
+      "definition": "methanol_output_h2s / counterfactual_clean_methanol_output",
+      "range": [0.0, 1.0],
+      "counterfactual_precedence": [
+        "same run and conditions immediately before H2S, corrected with an observed clean-feed aging trend",
+        "matched clean control at the same time on stream",
+        "paired baseline measured under the same reaction conditions"
+      ],
+      "disallowed_denominators": [
+        "methanol selectivity alone",
+        "an unmatched catalyst formulation",
+        "an unmatched temperature, pressure, feed, or space velocity",
+        "a global or cross-study average"
+      ]
+    },
+    "observed_log_decay_rate_h_minus_1": {
+      "definition": "-ln(activity_retention_fraction) / exposure_h",
+      "use": "secondary kinetic target only when exponential decay is supported and clean-feed aging is corrected or negligible"
+    },
+    "source_reported_h2s_coefficient": {
+      "definition": "the deactivation coefficient reported by the source using that source's stated equation and units",
+      "use": "separate kinetic table; never pooled until equations and units are proven equivalent"
+    }
+  },
+  "required_core_fields": [
+    "study_id",
+    "experimental_unit_id",
+    "catalyst_family",
+    "catalyst_label",
+    "exposure_mode",
+    "h2s_concentration_ppm",
+    "exposure_h",
+    "reaction_temperature_c",
+    "pressure_bar",
+    "feed_basis",
+    "space_velocity_h_minus_1",
+    "methanol_metric",
+    "clean_or_initial_value",
+    "h2s_value",
+    "activity_retention_fraction",
+    "measurement_status",
+    "source_location",
+    "duplicate_cluster_id"
+  ],
+  "strata": {
+    "core_continuous_cuznal": "Direct continuous H2S cofeed over Cu/ZnO/Al2O3 during methanol synthesis.",
+    "continuous_other_cu": "Direct cofeed over other Cu-containing formulations; supports catalyst-formulation effects but is not pooled with the core.",
+    "ex_situ_damage": "H2S pretreatment followed by a clean-feed methanol test; models retained catalyst damage, not instantaneous cofeed response.",
+    "sulfur_loading_response": "Activity related to measured catalyst sulfur loading when gas-phase H2S concentration or delivered dose is missing.",
+    "guard_bed_protection": "H2S is removed upstream; models protection performance, not direct catalyst poisoning.",
+    "non_cu_expansion": "Pd, In, or other non-Cu catalyst families.",
+    "mechanism_only": "No quantitative methanol-synthesis response."
+  },
+  "evidence_tiers": {
+    "A": "Primary experimental source; exact numerical H2S exposure and methanol response; catalyst and operating conditions identified; matched or aging-corrected baseline; no unresolved duplicate.",
+    "B": "Quantitative and useful but has one material limitation such as graph digitization, censoring, an unmatched initial point, incomplete operating metadata, or a protocol that requires a separate stratum.",
+    "C": "Supporting evidence with a major confound or missing exposure variable, including guard-bed tests, cumulative stages with changed flow, or concentration-free sulfur-loading studies.",
+    "D": "Mechanism, review, non-methanol reaction, mixed-sulfur field evidence, or non-Cu evidence outside the declared model stratum."
+  },
+  "exclusion_rules": [
+    "Impurity is not H2S.",
+    "H2S cannot be separated from other sulfur species or co-contaminants.",
+    "The reported response is not methanol synthesis activity, rate, yield, productivity, or a validated normalized form of one of those outcomes.",
+    "The experiment is a simulation without a distinct experimental observation.",
+    "H2S concentration is missing for a concentration-response model.",
+    "Exposure time or delivered dose is missing for a time- or dose-response model.",
+    "The methanol response is selectivity alone and conversion or rate is unavailable.",
+    "A guard bed prevents direct H2S exposure of the modeled catalyst.",
+    "A row duplicates the same physical run already represented by a preferred record."
+  ],
+  "duplicate_policy": {
+    "unit": "physical experimental run",
+    "rule": "Multiple papers, outcomes, or time points from one physical run share one duplicate_cluster_id and one study_group_id.",
+    "preferred_record_order": [
+      "clearest paired primary-source report",
+      "exact table value",
+      "exact text value",
+      "digitized figure value",
+      "secondary citation"
+    ],
+    "independence_rule": "Multiple time points and outcomes from a run are not independent samples for validation or evidence counts."
+  },
+  "aggregation_policy": {
+    "allowed": "Average only genuine replicates at the same catalyst, conditions, exposure, and outcome; preserve replicate count and standard deviation.",
+    "not_allowed": [
+      "imputing missing study variables with a cross-study mean",
+      "averaging different catalysts, exposure modes, outcome definitions, or sulfur species",
+      "treating several time points from one run as independent studies"
+    ]
+  },
+  "censoring_policy": {
+    "rule": "Store reported bounds as bounds, not point estimates.",
+    "example": "CO conversion reported as below 1% is left-censored at 1%; any derived methanol-output retention remains a bound.",
+    "digitization": "Store the digitized value, extraction method, and an uncertainty interval or sensitivity range."
+  },
+  "uncertainty_policy": {
+    "reported": "Use source-reported uncertainty and replicate count when available.",
+    "calculated": "Propagate uncertainty from numerator and denominator when available; otherwise label uncertainty as unavailable.",
+    "digitized": "Use figure-resolution or repeat-digitization sensitivity; do not describe a digitized value as reported.",
+    "model": "Use study-cluster resampling or study-level sensitivity, never a random row split."
+  },
+  "validation_policy": {
+    "primary": "Leave-one-study-out validation using entire held-out studies.",
+    "secondary": "Leave-one-catalyst-formulation-out sensitivity when more than one formulation is modeled.",
+    "forbidden": "Random row-level train/test splitting."
+  },
+  "global_fit_gate": {
+    "minimum_independent_studies": 4,
+    "minimum_independent_experimental_units": 20,
+    "minimum_distinct_h2s_concentrations": 4,
+    "minimum_studies_with_matched_or_aging_corrected_baseline": 2,
+    "minimum_required_field_completeness_fraction": 0.8,
+    "maximum_free_parameters": 3,
+    "require_at_least_two_held_out_studies_with_quantitative_targets": true,
+    "fallback_if_gate_fails": "Do not publish a universal fitted curve. Implement source-specific kinetic calculations, bounded scenarios, and a transparent evidence-gap report."
+  }
+}
