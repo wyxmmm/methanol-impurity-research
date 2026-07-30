@@ -17,6 +17,7 @@ __pycache__/
 .venv/
 venv/
 .ipynb_checkpoints/
+.matplotlib/
 
 # Editors and operating systems
 .vscode/
@@ -28,6 +29,8 @@ Thumbs.db
 tmp/
 work/
 dist/
+data/processed/h2s/
+results/h2s/
 *.png
 *.jpg
 *.jpeg
