@@ -19,6 +19,8 @@ The current computational stage focuses on H2S and uses an explicit evidence gat
 
 One row in `main_data.tsv` represents one experimental condition. Repeated rows from one curve or companion publication are not automatically independent experiments.
 
+Important: `data/pilot/sulfur_stage2_verified.csv` is preserved as a legacy Stage-2 input. Its T1-001 H2S rows are known reconciliation errors; `src/h2s_dataset_builder.py` quarantines them and replaces only the supported 4 h record. Do not use that CSV directly as validated H2S evidence.
+
 ## H2S evidence engine
 
 The H2S stage is implemented in:
