@@ -6,7 +6,9 @@ This repository contains my ongoing Research project on how impurities in hydrog
 
 > To what extent can literature-derived impurity concentration, catalyst family, and operating conditions predict methanol performance loss during CO2 hydrogenation and methanol synthesis?
 
-The current computational stage focuses on H2S and uses an explicit evidence gate before fitting any cross-study model.
+The H2S evidence stage is preserved as a completed no-fit checkpoint. The
+active Catalyst 1 stage now focuses on externally validating a clean-reactor
+kinetic model for unsupported In2O3 before adding another catalyst or impurity.
 
 ## Current data
 
@@ -38,16 +40,52 @@ See:
 - `docs/h2s_phase5_evidence_engine.md`
 - `docs/h2s_paper_ready_explanation.md`
 
+## Catalyst 1: unsupported In2O3
+
+The first catalyst-specific reactor model reproduces Ghosh et al. (2021), DOI
+`10.1016/j.cej.2021.129120`. It integrates three reversible reactions in an
+isothermal, isobaric plug-flow reactor:
+
+1. CO2 hydrogenation to methanol;
+2. reverse water-gas shift to CO;
+3. CO2 methanation to CH4.
+
+The published parameters are used without refitting. Across all 32 reported
+conditions, the reproduction has mean absolute errors of 0.712 percentage
+points for CO2 conversion, 3.732 for MeOH selectivity, 3.538 for CO
+selectivity, and 0.288 for CH4 selectivity.
+
+This is a published-source reproduction, not independent validation. The next
+scientific phase is to find and hold out a compatible outside unsupported-
+In2O3 study. Supported In2O3/ZrO2 evidence cannot validate the numerical
+parameters of this catalyst.
+
+Key files:
+
+- `src/ghosh_in2o3_pfr.py` - published LHHW rates and PFR balances;
+- `src/ghosh_in2o3_reproduction.py` - reproducible calibration, sensitivity,
+  convergence, and validation-input outputs;
+- `data/curated/unsupported_in2o3/` - 32 calibration conditions, published
+  parameters, and six SI validation inputs;
+- `docs/unsupported_in2o3/catalyst1_completion_protocol.md` - completion and
+  external-validation rules;
+- `docs/unsupported_in2o3/model_input_audit.md` - source assumptions and
+  ambiguities;
+- `docs/unsupported_in2o3/model_reproduction_and_transfer.md` - numerical
+  result and transfer decision.
+
 ## Run
 
 ```powershell
 python -m pip install -r requirements.txt
 python -m src.h2s_dataset_builder
 python -m src.h2s_evidence_engine
+python -m src.ghosh_in2o3_reproduction
 python -m pytest -q
 ```
 
-Generated H2S datasets and results are intentionally ignored by Git because they can be reproduced from the committed inputs.
+Generated H2S and unsupported-In2O3 result tables are intentionally ignored by
+Git because they can be reproduced from the committed inputs.
 
 ## Repository structure
 
@@ -62,6 +100,9 @@ tests/   Automated validation and integrity checks
 ## Current limitations
 
 - The H2S core is too small for a defensible universal prediction model.
+- The unsupported-In2O3 model has reproduced its calibration source but has
+  not yet passed independent whole-study validation.
+- Its parameter values do not represent supported In2O3/ZrO2.
 - Several sources report proxies, reverse reactions, or incompatible exposure protocols.
 - Most studies do not provide replicate uncertainty or matched clean-aging controls.
 - Literature-derived outputs are not replacements for laboratory experiments or industrial safety limits.

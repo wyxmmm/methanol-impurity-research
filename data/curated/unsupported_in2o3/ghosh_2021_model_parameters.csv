@@ -1,0 +1,11 @@
+reaction_or_adsorbate,parameter,value,unit,reference_temperature_c,reported_sensitivity,source_location
+MeOH_synthesis,k_ref,0.00069,mol_s_bar-2_kgcat-1,300,0.022,Table_3
+MeOH_synthesis,Ea,35.7,kJ_mol-1,300,0.012,Table_3
+RWGS,k_ref,0.0018,mol_s_bar-1.5_kgcat-1,300,0.038,Table_3
+RWGS,Ea,54.5,kJ_mol-1,300,0.059,Table_3
+CO2_methanation,k_ref,0.00011,mol_s_bar-1_kgcat-1,300,0.032,Table_3
+CO2_methanation,Ea,42.5,kJ_mol-1,300,0.026,Table_3
+H2_adsorption,K_ref,0.76,bar-1,300,0.013,Table_4
+H2_adsorption,delta_H_ads,-12.5,kJ_mol-1,300,0.0008,Table_4
+CO2_adsorption,K_ref,0.79,bar-1,300,0.129,Table_4
+CO2_adsorption,delta_H_ads,-25.9,kJ_mol-1,300,0.053,Table_4
