@@ -28,9 +28,13 @@ Calculated values are labeled separately from author-reported or digitized value
 
 Related reports, theses, conference papers, and journal articles may describe the same underlying experiment. These records are retained for traceability, but suspected overlaps are marked in `data/duplicate_check.tsv` so they are not automatically treated as independent evidence.
 
-## Planned analysis
+## Catalyst-specific modeling sequence
 
-Before modeling, the remaining graph values will be extracted, baseline links will be checked, duplicate experiments will be resolved, and incompatible outcome types will be separated. Python analysis will begin only after that review.
+The project now separates catalyst-specific clean reactor models from
+impurity-response modules. The first catalyst is unsupported In2O3. Its clean
+model must be reproduced and externally validated before a new catalyst or
+impurity response is attached. Numerical parameters are not transferred
+silently between unsupported and supported catalysts.
 
 ## Planned computational analysis
 
@@ -54,4 +58,16 @@ The analysis will begin with simple, interpretable statistical models. More comp
 
 Results will include model accuracy, uncertainty, sensitivity to modeling choices, and the limitations created by missing or unevenly distributed evidence. Predictions will be presented as literature-derived estimates, not as replacements for laboratory experiments or industrial safety limits.
 
-When coding begins, a `code/` folder will be added for the analysis scripts. Generated tables and figures will be kept separate from the original extracted data so that each step from literature values to final results can be checked and repeated.
+The Ghosh unsupported-In2O3 implementation uses the reported single-site LHHW
+rates in a plug-flow reactor. Published parameters are tested without
+refitting first. Source reproduction uses all 32 reported conditions, while
+external validation must hold out an entire compatible outside study.
+Generated tables and figures remain separate from committed source-derived
+inputs so each calculation can be checked and repeated.
+
+Model evaluation reports conversion and selectivity errors in percentage
+points, RMSE, bias, productivity ratios or log error, qualitative operating-
+condition trends, numerical convergence, and sensitivity to source
+ambiguities. MAPE is avoided for near-zero outcomes. Refitting is permitted
+only if multiple compatible datasets exist, one complete study remains held
+out, parameters are identifiable, and uncertainty can be reported.

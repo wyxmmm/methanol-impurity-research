@@ -1,0 +1,7 @@
+study_id,run_id,pressure_bar,temperature_c,whsv_ml_gcat_h,h2_co2_ratio,experimental_outputs_available,source_location
+GHOSH-2021,6a,40,220,16000,4,no,SI_Table_S3
+GHOSH-2021,6b,40,250,16000,4,no,SI_Table_S3
+GHOSH-2021,6c,30,340,9000,3,no,SI_Table_S3
+GHOSH-2021,6d,40,250,6000,4,no,SI_Table_S3
+GHOSH-2021,6e,30,300,9000,4,no,SI_Table_S3
+GHOSH-2021,6f,20,350,16000,3,no,SI_Table_S3
