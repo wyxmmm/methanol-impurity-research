@@ -55,10 +55,21 @@ conditions, the reproduction has mean absolute errors of 0.712 percentage
 points for CO2 conversion, 3.732 for MeOH selectivity, 3.538 for CO
 selectivity, and 0.288 for CH4 selectivity.
 
-This is a published-source reproduction, not independent validation. The next
-scientific phase is to find and hold out a compatible outside unsupported-
-In2O3 study. Supported In2O3/ZrO2 evidence cannot validate the numerical
-parameters of this catalyst.
+The published-source reproduction has now been tested, without refitting, on
+88 conditions from six outside unsupported-In2O3 studies. All conditions ran
+successfully, but the locked model transferred unevenly: its mean absolute
+errors were 2.124 percentage points for CO2 conversion, 18.479 for methanol
+selectivity, and 2.067 for methanol yield. Part A therefore closes as a
+diagnostic checkpoint, not as proof that the published parameters are a
+general unsupported-In2O3 model. The principal transfer weakness is product
+branching/selectivity rather than numerical solver failure.
+
+Part B is the clean-catalyst bridge to In2O3/ZrO2. It will first audit whether
+the supported-catalyst literature provides comparable clean baselines and
+enough information to distinguish support effects from operating-condition
+effects. No unsupported-In2O3 parameter will be silently relabeled as an
+In2O3/ZrO2 parameter, and impurity fitting will wait until this bridge is
+scientifically defined.
 
 Key files:
 
@@ -73,6 +84,14 @@ Key files:
   ambiguities;
 - `docs/unsupported_in2o3/model_reproduction_and_transfer.md` - numerical
   result and transfer decision.
+- `docs/unsupported_in2o3/part_a_diagnostic_audit_2026-08-12.md` - locked
+  six-study transfer audit and residual diagnosis;
+- `docs/unsupported_in2o3/part_a_mentor_summary_2026-08-12.md` - concise
+  explanation of what Part A established;
+- `docs/unsupported_in2o3/part_b_catalyst_bridge_plan.md` - next-stage scope
+  and decision gate;
+- `docs/model_equation_registry.md` - controlled record of the equations,
+  units, provenance, domains, and implementation status used by the code.
 
 ## Run
 
@@ -81,6 +100,8 @@ python -m pip install -r requirements.txt
 python -m src.h2s_dataset_builder
 python -m src.h2s_evidence_engine
 python -m src.ghosh_in2o3_reproduction
+python -m src.ghosh_external_validation_batch
+python -m src.ghosh_part_a_diagnostics
 python -m pytest -q
 ```
 
@@ -100,8 +121,9 @@ tests/   Automated validation and integrity checks
 ## Current limitations
 
 - The H2S core is too small for a defensible universal prediction model.
-- The unsupported-In2O3 model has reproduced its calibration source but has
-  not yet passed independent whole-study validation.
+- The locked unsupported-In2O3 model runs across six external studies, but its
+  product-selectivity transfer error is too large to call it a general
+  validated model.
 - Its parameter values do not represent supported In2O3/ZrO2.
 - Several sources report proxies, reverse reactions, or incompatible exposure protocols.
 - Most studies do not provide replicate uncertainty or matched clean-aging controls.

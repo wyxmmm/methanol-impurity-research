@@ -82,3 +82,39 @@ Future entries should record the date, work completed, decisions made, unresolve
   unsupported or bulk In2O3 studies, beginning with Martin and Frei.
 - Apply the unchanged Ghosh parameters to a compatible held-out study before
   considering refitting.
+
+## 2026-08-12
+
+### Part A external-transfer diagnostic completed
+
+- Applied the unchanged Ghosh unsupported-In2O3 model to 88 clean-feed
+  conditions from six external studies; no kinetic, adsorption, or
+  thermodynamic parameter was fitted to those studies.
+- Audited catalyst phase, preparation family, response provenance, inert-feed
+  handling, flow normalization, and whether each condition lay inside the
+  original model's numerical operating range.
+- Resolved the Yang space-velocity question from the supplied main article:
+  Figure 2 reports mass-normalized `mL g^-1 h^-1`. Its 26 rows were therefore
+  released from the unit hold but remain lower-certainty because their
+  responses were digitized from graphs.
+- Obtained successful numerical solutions for all 88 conditions. The locked
+  external-test MAEs were 2.124 percentage points for CO2 conversion, 18.479
+  for methanol selectivity, and 2.067 for methanol yield.
+- Determined that software execution was not the limiting issue. The main
+  transfer weakness was methanol/RWGS product branching, with additional
+  between-study effects associated with phase and catalyst preparation.
+- Closed Part A as a diagnostic checkpoint. The result does not establish a
+  universal unsupported-In2O3 model, an In2O3/ZrO2 model, or an H2S model.
+- Added a controlled equation registry so the paper can trace every published,
+  project-derived, source-specific, and candidate mathematical expression.
+
+### Next action: Part B catalyst bridge
+
+- Audit clean In2O3/ZrO2 studies and define which conditions can form a
+  defensible bridge from the unsupported-In2O3 baseline.
+- Keep phases, support state, preparation, and direct versus digitized evidence
+  explicit.
+- Decide whether the evidence supports a bounded support correction, a
+  separate supported-catalyst clean model, or no quantitative bridge.
+- Do not tune an impurity response until the clean supported-catalyst baseline
+  and its validation domain are defined.
