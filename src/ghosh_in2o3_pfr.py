@@ -28,14 +28,14 @@ DATA_PATH = (
     ROOT
     / "data"
     / "curated"
-    / "unsupported_in2o3"
+    / "in2o3_zro2"
     / "ghosh_2021_unsupported_in2o3_kinetics.csv"
 )
 VALIDATION_DATA_PATH = (
     ROOT
     / "data"
     / "curated"
-    / "unsupported_in2o3"
+    / "in2o3_zro2"
     / "ghosh_2021_validation_inputs.csv"
 )
 R_GAS = 8.31446261815324  # J mol-1 K-1
@@ -141,6 +141,8 @@ class ReactorCase:
     whsv_ml_gcat_h: float
     h2_co2_ratio: float
     catalyst_mass_g: float = 1.0
+    inert_mole_fraction: float = 0.0
+    inert_species: str = "none"
 
 
 def _nasa_g_rt(species: str, temperature_k: float) -> float:
@@ -248,10 +250,21 @@ def _flow_derivative(
     temperature_k: float,
     parameters: KineticParameters,
     swap_adsorption_enthalpies: bool,
+    inert_flow: float = 0.0,
 ) -> list[float]:
+    reactive_total = sum(flows)
+    total_with_inert = reactive_total + inert_flow
+    if reactive_total <= 0 or total_with_inert <= 0:
+        raise ValueError("Total reactor flow must remain positive.")
+    # reaction_rates normalizes the six reacting species internally. Scaling
+    # pressure by their fraction of the total flow preserves the correct
+    # partial pressures while carrying an unreactive inlet species.
+    reactive_partial_pressure_sum = (
+        pressure_bar_absolute * reactive_total / total_with_inert
+    )
     rates = reaction_rates(
         flows,
-        pressure_bar_absolute,
+        reactive_partial_pressure_sum,
         temperature_k,
         parameters,
         swap_adsorption_enthalpies=swap_adsorption_enthalpies,
@@ -269,8 +282,15 @@ def _rk4_step(
     temperature_k: float,
     parameters: KineticParameters,
     swap_adsorption_enthalpies: bool,
+    inert_flow: float = 0.0,
 ) -> list[float]:
-    args = (pressure_bar_absolute, temperature_k, parameters, swap_adsorption_enthalpies)
+    args = (
+        pressure_bar_absolute,
+        temperature_k,
+        parameters,
+        swap_adsorption_enthalpies,
+        inert_flow,
+    )
     k1 = _flow_derivative(flows, *args)
     y2 = [value + step_kg * slope / 2 for value, slope in zip(flows, k1)]
     k2 = _flow_derivative(y2, *args)
@@ -297,6 +317,14 @@ def simulate_case(
 
     if integration_steps < 20:
         raise ValueError("integration_steps must be at least 20.")
+    if not 0.0 <= case.inert_mole_fraction < 1.0:
+        raise ValueError("inert_mole_fraction must be at least 0 and less than 1.")
+    if case.pressure_bar_reported <= 0:
+        raise ValueError("pressure_bar_reported must be positive.")
+    if case.whsv_ml_gcat_h <= 0 or case.catalyst_mass_g <= 0:
+        raise ValueError("WHSV and catalyst mass must be positive.")
+    if case.h2_co2_ratio <= 0:
+        raise ValueError("H2/CO2 ratio must be positive.")
     if pressure_interpretation == "reported_absolute":
         pressure_bar = case.pressure_bar_reported
     elif pressure_interpretation == "reported_gauge":
@@ -319,8 +347,10 @@ def simulate_case(
         / STANDARD_MOLAR_VOLUME_ML_MOL
         / 3600.0
     )
-    co2_in = inlet_total / (1.0 + case.h2_co2_ratio)
-    h2_in = inlet_total - co2_in
+    reactive_inlet = inlet_total * (1.0 - case.inert_mole_fraction)
+    co2_in = reactive_inlet / (1.0 + case.h2_co2_ratio)
+    h2_in = reactive_inlet - co2_in
+    inert_in = inlet_total * case.inert_mole_fraction
     flows: list[float] = [co2_in, h2_in, 0.0, 0.0, 0.0, 0.0]
     step_kg = integrated_mass_g / 1000.0 / integration_steps
 
@@ -332,6 +362,7 @@ def simulate_case(
             temperature_k,
             parameters,
             swap_adsorption_enthalpies,
+            inert_in,
         )
         # Tiny negative values can arise from roundoff; a material negative
         # value indicates an integration failure or a domain excursion.
@@ -350,7 +381,7 @@ def simulate_case(
         "ch4": flows[INDEX["CH4"]],
     }
     denominator = max(co2_consumed, 1e-30)
-    total_out = sum(flows)
+    total_out = sum(flows) + inert_in
     result: dict[str, float | str] = {
         "run_id": case.run_id,
         "pressure_bar_reported": case.pressure_bar_reported,
@@ -358,14 +389,21 @@ def simulate_case(
         "temperature_c": case.temperature_c,
         "whsv_ml_gcat_h": case.whsv_ml_gcat_h,
         "h2_co2_ratio": case.h2_co2_ratio,
+        "catalyst_mass_g_used": case.catalyst_mass_g,
+        "inert_species": case.inert_species if case.inert_mole_fraction > 0 else "none",
+        "inert_inlet_mole_fraction": case.inert_mole_fraction,
         "co2_conversion_percent_pred": conversion,
         "meoh_selectivity_percent_pred": products["meoh"] / denominator * 100.0,
+        "meoh_yield_percent_pred": conversion * products["meoh"] / denominator,
         "co_selectivity_percent_pred": products["co"] / denominator * 100.0,
         "ch4_selectivity_percent_pred": products["ch4"] / denominator * 100.0,
         "meoh_outlet_mole_fraction_pred": products["meoh"] / total_out,
+        "meoh_outlet_mol_s_pred": products["meoh"],
+        "meoh_outlet_g_h_pred": products["meoh"] * METHANOL_MOLAR_MASS_G_MOL * 3600.0,
         "co_outlet_mole_fraction_pred": products["co"] / total_out,
         "ch4_outlet_mole_fraction_pred": products["ch4"] / total_out,
         "co2_outlet_mole_fraction_pred": flows[INDEX["CO2"]] / total_out,
+        "inert_outlet_mole_fraction_pred": inert_in / total_out,
         "meoh_productivity_g_gcat_h_pred": (
             products["meoh"] * METHANOL_MOLAR_MASS_G_MOL * 3600.0 / case.catalyst_mass_g
         ),

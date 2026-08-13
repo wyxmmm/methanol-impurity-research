@@ -1,0 +1,11 @@
+plot,type,path,preview_path
+temperature,numeric,plots\residuals_vs_temperature.svg,plots\residuals_vs_temperature.png
+pressure,numeric,plots\residuals_vs_pressure.svg,plots\residuals_vs_pressure.png
+h2_co2_ratio,numeric,plots\residuals_vs_h2_co2_ratio.svg,plots\residuals_vs_h2_co2_ratio.png
+whsv,numeric,plots\residuals_vs_whsv.svg,plots\residuals_vs_whsv.png
+inert_fraction,numeric,plots\residuals_vs_inert_fraction.svg,plots\residuals_vs_inert_fraction.png
+phase,categorical,plots\residuals_by_phase.svg,plots\residuals_by_phase.png
+study,categorical,plots\residuals_by_study.svg,plots\residuals_by_study.png
+evidence,categorical,plots\residuals_by_evidence.svg,plots\residuals_by_evidence.png
+domain,categorical,plots\residuals_by_domain.svg,plots\residuals_by_domain.png
+preparation,categorical,plots\residuals_by_preparation.svg,plots\residuals_by_preparation.png

@@ -75,3 +75,39 @@ def test_validation_grid_preserves_all_six_si_conditions():
     rows = predict_validation_grid(integration_steps=150)
     assert [row["run_id"] for row in rows] == ["6a", "6b", "6c", "6d", "6e", "6f"]
     assert all(row["model_scope"] == "Ghosh_2021_unsupported_In2O3_only" for row in rows)
+
+
+def test_zero_inert_extension_preserves_original_prediction():
+    original = simulate_case(ReactorCase("original", 40.0, 300.0, 7200.0, 3.0, 0.5))
+    explicit_zero = simulate_case(
+        ReactorCase("zero-inert", 40.0, 300.0, 7200.0, 3.0, 0.5, 0.0, "N2")
+    )
+    for field in (
+        "co2_conversion_percent_pred",
+        "meoh_selectivity_percent_pred",
+        "co_selectivity_percent_pred",
+        "ch4_selectivity_percent_pred",
+        "meoh_productivity_g_gcat_h_pred",
+    ):
+        assert explicit_zero[field] == pytest.approx(original[field], abs=1e-12)
+
+
+def test_inert_extension_changes_partial_pressures_without_changing_selectivity_sum():
+    result = simulate_case(
+        ReactorCase("with-inert", 40.0, 300.0, 7200.0, 3.0, 0.5, 0.20, "N2")
+    )
+    assert result["inert_species"] == "N2"
+    assert result["inert_inlet_mole_fraction"] == pytest.approx(0.20)
+    assert result["inert_outlet_mole_fraction_pred"] > 0
+    assert (
+        result["meoh_selectivity_percent_pred"]
+        + result["co_selectivity_percent_pred"]
+        + result["ch4_selectivity_percent_pred"]
+    ) == pytest.approx(100.0, abs=1e-8)
+
+
+def test_inert_fraction_must_be_physical():
+    with pytest.raises(ValueError, match="inert_mole_fraction"):
+        simulate_case(
+            ReactorCase("invalid-inert", 40.0, 300.0, 7200.0, 3.0, 0.5, 1.0, "N2")
+        )
