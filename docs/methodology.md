@@ -71,3 +71,25 @@ condition trends, numerical convergence, and sensitivity to source
 ambiguities. MAPE is avoided for near-zero outcomes. Refitting is permitted
 only if multiple compatible datasets exist, one complete study remains held
 out, parameters are identifiable, and uncertainty can be reported.
+
+## Equation governance
+
+Every mathematical operation used for a reported model result is recorded in
+`docs/model_equation_registry.md`. Each entry identifies the equation,
+variables and units, source or project derivation, applicability domain, and
+implementation status. This separates published kinetic equations from
+project-derived conversions and from candidate equations that have not been
+implemented or validated.
+
+The registry also preserves the model hierarchy used by this project:
+
+```text
+operating conditions -> clean-catalyst methanol output
+                     -> impurity-retention response
+                     -> impurity-affected methanol output
+```
+
+The clean-catalyst layer is necessary for the final impurity question, but it
+is not itself the endpoint. Equations and fitted values cannot be transferred
+between unsupported In2O3, supported In2O3/ZrO2, and Cu/ZnO/Al2O3 without an
+explicit evidence bridge and a documented validation decision.
