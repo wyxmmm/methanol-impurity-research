@@ -1,13 +1,14 @@
 # Ghosh model reproduction and supported-catalyst transfer decision
 
-Checkpoint date: 2026-08-03
+Checkpoint date: 2026-08-03; external-transfer diagnostic updated 2026-08-12
 
 ## Result in one sentence
 
-The published unsupported-In2O3 model has been reproduced well enough to use
-as a bounded simulator for the Ghosh catalyst, but the supplied supported-
-In2O3/ZrO2 studies show that its numerical parameters cannot be transferred
-as a validated model for T1-001.
+The published unsupported-In2O3 model reproduces the Ghosh catalyst, but a
+locked test across 88 conditions from six outside studies shows that its
+numerical parameters do not provide a general cross-study product-selectivity
+model. They also cannot be transferred as a validated model for supported
+In2O3/ZrO2 or T1-001.
 
 ## Calibration reproduction
 
@@ -44,13 +45,56 @@ article is internally inconsistent about the role of Series 5.
 This supports the selected primary convention, but does not eliminate the
 unpublished-thermochemistry or pressure-convention uncertainty.
 
-## Held-out validation status
+## Ghosh supplementary validation status
 
 The six SI Table S3 conditions have been simulated and saved. A numerical
 held-out score is not scientifically identifiable from the supplied files:
 the SI gives inputs only, and the main article gives anonymous parity points
 without condition labels. The code does not digitize and falsely pair those
 points with the six runs.
+
+## Locked external-transfer diagnostic
+
+The unchanged published parameters were applied to 88 clean-feed conditions
+from six outside unsupported-In2O3 studies. No kinetic, adsorption, or
+thermodynamic parameter was fitted, optimized, or selected using those
+conditions. Every row produced a numerical solution.
+
+Residual means prediction minus observation. Errors are percentage points.
+
+| Response | n | MAE | RMSE | Bias | Study-balanced MAE |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| CO2 conversion | 88 | 2.124 | 3.219 | -0.508 | 2.197 |
+| MeOH selectivity | 88 | 18.479 | 20.780 | +6.907 | 13.870 |
+| MeOH yield | 88 | 2.067 | 2.685 | +0.036 | 1.796 |
+
+The model's largest transfer weakness is methanol/RWGS branching. MeOH-
+selectivity MAE remains 19.881 percentage points for the 41 conditions inside
+the original numeric operating ranges, so extrapolation alone does not explain
+the error. Directly reported/non-digitized observations also show substantial
+selectivity error, so graph digitization is not the sole cause.
+
+Study-level residuals reverse sign: the model underpredicts some preparation
+families and overpredicts others. Apparent phase effects are not separately
+identifiable because the hexagonal and rhombohedral evidence each comes from
+only one study; phase, preparation, morphology, and study protocol are
+confounded. Pooled yield bias is near zero partly because conversion and
+selectivity errors cancel across conditions, not because individual yields
+are uniformly accurate.
+
+The predefined alternative adsorption-enthalpy assignment from the Ghosh
+prose was tested without fitting. It changed conversion, selectivity, and
+yield MAE to 2.154, 18.864, and 2.019 percentage points, respectively. Because
+it slightly improves yield only by worsening the two component responses, the
+published Table 4 assignment remains the locked reference.
+
+This checkpoint establishes software reproducibility and diagnoses transfer
+failure; it does not experimentally validate a universal unsupported-In2O3
+model. Any future calibration should begin with the locked Ghosh model as the
+benchmark and test only a predeclared, bounded pair of MeOH and RWGS rate
+multipliers. Training and validation must keep complete studies together and
+must judge conversion and selectivity separately rather than optimizing yield
+alone. Phase-specific deviations are not currently identifiable.
 
 ## What the newly supplied supported-catalyst papers add
 

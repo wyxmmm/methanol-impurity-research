@@ -64,13 +64,6 @@ diagnostic checkpoint, not as proof that the published parameters are a
 general unsupported-In2O3 model. The principal transfer weakness is product
 branching/selectivity rather than numerical solver failure.
 
-Part B is the clean-catalyst bridge to In2O3/ZrO2. It will first audit whether
-the supported-catalyst literature provides comparable clean baselines and
-enough information to distinguish support effects from operating-condition
-effects. No unsupported-In2O3 parameter will be silently relabeled as an
-In2O3/ZrO2 parameter, and impurity fitting will wait until this bridge is
-scientifically defined.
-
 Key files:
 
 - `src/ghosh_in2o3_pfr.py` - published LHHW rates and PFR balances;
@@ -80,16 +73,10 @@ Key files:
   parameters, and six SI validation inputs;
 - `docs/unsupported_in2o3/catalyst1_completion_protocol.md` - completion and
   external-validation rules;
-- `docs/unsupported_in2o3/model_input_audit.md` - source assumptions and
-  ambiguities;
-- `docs/unsupported_in2o3/model_reproduction_and_transfer.md` - numerical
-  result and transfer decision.
-- `docs/unsupported_in2o3/part_a_diagnostic_audit_2026-08-12.md` - locked
-  six-study transfer audit and residual diagnosis;
-- `docs/unsupported_in2o3/part_a_mentor_summary_2026-08-12.md` - concise
-  explanation of what Part A established;
-- `docs/unsupported_in2o3/part_b_catalyst_bridge_plan.md` - next-stage scope
-  and decision gate;
+- `docs/unsupported_in2o3/model_input_audit.md` - source assumptions,
+  ambiguities, external-evidence provenance, and Yang flow-basis resolution;
+- `docs/unsupported_in2o3/model_reproduction_and_transfer.md` - source
+  reproduction, locked six-study transfer results, and failure diagnosis;
 - `docs/model_equation_registry.md` - controlled record of the equations,
   units, provenance, domains, and implementation status used by the code.
 

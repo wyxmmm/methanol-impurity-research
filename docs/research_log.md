@@ -107,14 +107,3 @@ Future entries should record the date, work completed, decisions made, unresolve
   universal unsupported-In2O3 model, an In2O3/ZrO2 model, or an H2S model.
 - Added a controlled equation registry so the paper can trace every published,
   project-derived, source-specific, and candidate mathematical expression.
-
-### Next action: Part B catalyst bridge
-
-- Audit clean In2O3/ZrO2 studies and define which conditions can form a
-  defensible bridge from the unsupported-In2O3 baseline.
-- Keep phases, support state, preparation, and direct versus digitized evidence
-  explicit.
-- Decide whether the evidence supports a bounded support correction, a
-  separate supported-catalyst clean model, or no quantitative bridge.
-- Do not tune an impurity response until the clean supported-catalyst baseline
-  and its validation domain are defined.

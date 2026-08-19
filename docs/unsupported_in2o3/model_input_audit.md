@@ -1,6 +1,6 @@
 # Ghosh unsupported-In2O3 model input audit
 
-Checkpoint date: 2026-08-03
+Checkpoint date: 2026-08-03; external-evidence audit updated 2026-08-12
 
 ## Scope and source identity
 
@@ -121,3 +121,43 @@ values. Figure 12 shows six anonymous square markers in each parity panel,
 but does not map a marker to run 6a-6f. Therefore the six inputs can be
 predicted as a block, but condition-level held-out errors cannot be calculated
 without the authors' underlying data.
+
+## External unsupported-In2O3 input audit
+
+The locked external-transfer table contains 88 clean-feed conditions from six
+independent studies. It preserves the original reported fields and records
+catalyst phase and preparation, inert status, flow-normalization basis,
+numeric-domain status, response-specific provenance, and whether an outcome
+was reported directly, calculated, or digitized from a figure.
+
+| Evidence characteristic | Conditions |
+| --- | ---: |
+| Total external conditions | 88 |
+| Cubic In2O3 | 56 |
+| Hexagonal In2O3 | 19 |
+| Rhombohedral In2O3 | 13 |
+| Inside every original Ghosh numeric range | 41 |
+| Outside or incomplete relative to that range | 47 |
+| Graph-digitized | 65 |
+| Non-graph-digitized | 23 |
+
+The input records are stored in
+`data/processed/unsupported_in2o3/ghosh_yield_validation_candidates.csv`, and
+the corresponding catalyst descriptors are stored in
+`data/curated/unsupported_in2o3/catalyst_descriptors.csv`. Complete studies
+remain identifiable so repeated rows from one paper are not treated as
+independent studies.
+
+### Yang flow-basis resolution
+
+The Yang main article (DOI `10.1016/j.cclet.2020.05.031`) explicitly labels
+Figure 2's temperature and flow series in `mL g^-1 h^-1`. The plotted quantity
+is therefore mass-normalized gas flow rather than an undefined reactor-volume
+GHSV in `h^-1`. All 26 Yang conditions can be used for conversion,
+selectivity, and yield residuals. They remain lower-certainty because their
+responses were digitized from graphs. The normalization does not establish an
+absolute methanol flow because actual catalyst mass and total flow were not
+reported.
+
+No source value was replaced during this audit. The original source status and
+the audited modeling status are retained as separate fields.

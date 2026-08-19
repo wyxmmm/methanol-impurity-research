@@ -37,12 +37,6 @@ DEFAULT_CANDIDATES = (
 DEFAULT_DESCRIPTORS = (
     ROOT / "data" / "curated" / "unsupported_in2o3" / "catalyst_descriptors.csv"
 )
-DEFAULT_LOCKED_OUTPUT = (
-    ROOT
-    / "results"
-    / "ghosh_external_validation_all_studies"
-    / "methanol_outputs_by_condition.csv"
-)
 DEFAULT_OUTPUT_DIR = ROOT / "results" / "ghosh_part_a_diagnostic_2026-08-12"
 
 RESPONSE_SPECS: dict[str, tuple[str, str, str, str]] = {
@@ -696,7 +690,6 @@ def create_plots(residuals: pd.DataFrame, output_dir: Path) -> pd.DataFrame:
 def build_outputs(
     candidates_path: Path = DEFAULT_CANDIDATES,
     descriptors_path: Path = DEFAULT_DESCRIPTORS,
-    locked_output_path: Path = DEFAULT_LOCKED_OUTPUT,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     *,
     integration_steps: int = 800,
@@ -704,7 +697,6 @@ def build_outputs(
     source_hashes_before = {
         str(candidates_path.relative_to(ROOT)): sha256(candidates_path),
         str(descriptors_path.relative_to(ROOT)): sha256(descriptors_path),
-        str(locked_output_path.relative_to(ROOT)): sha256(locked_output_path),
     }
     candidates = load_candidates(candidates_path)
     descriptors = pd.read_csv(descriptors_path)
@@ -738,7 +730,6 @@ def build_outputs(
     source_hashes_after = {
         str(candidates_path.relative_to(ROOT)): sha256(candidates_path),
         str(descriptors_path.relative_to(ROOT)): sha256(descriptors_path),
-        str(locked_output_path.relative_to(ROOT)): sha256(locked_output_path),
     }
     input_ids = set(candidates["reactorcase_run_id"].astype(str))
     audit_ids = set(audit["reactorcase_run_id"].astype(str))
@@ -819,7 +810,6 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidates", type=Path, default=DEFAULT_CANDIDATES)
     parser.add_argument("--descriptors", type=Path, default=DEFAULT_DESCRIPTORS)
-    parser.add_argument("--locked-output", type=Path, default=DEFAULT_LOCKED_OUTPUT)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--integration-steps", type=int, default=800)
     args = parser.parse_args()
@@ -828,7 +818,6 @@ def main() -> None:
             build_outputs(
                 args.candidates,
                 args.descriptors,
-                args.locked_output,
                 args.output_dir,
                 integration_steps=args.integration_steps,
             ),

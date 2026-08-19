@@ -7,7 +7,6 @@ from src.ghosh_external_validation_batch import load_candidates
 from src.ghosh_part_a_diagnostics import (
     DEFAULT_CANDIDATES,
     DEFAULT_DESCRIPTORS,
-    DEFAULT_LOCKED_OUTPUT,
     audit_candidates,
     build_outputs,
     grouped_metrics,
@@ -72,7 +71,6 @@ def test_part_a_build_is_additive_and_preserves_yield_decomposition(tmp_path):
     decision = build_outputs(
         DEFAULT_CANDIDATES,
         DEFAULT_DESCRIPTORS,
-        DEFAULT_LOCKED_OUTPUT,
         tmp_path,
         integration_steps=30,
     )
