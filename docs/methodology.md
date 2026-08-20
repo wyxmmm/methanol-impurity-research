@@ -1,14 +1,25 @@
 # Methodology
 
+This document records the rules I use to decide which literature results can
+be compared. The purpose is to prevent a larger-looking dataset from hiding
+important differences between catalysts, exposure methods, and methanol
+measurements.
+
 ## Source selection
 
-The current dataset comes from original studies that experimentally examine methanol synthesis under an impurity, contaminant, realistic gas mixture, or pre-poisoned catalyst condition. Reviews can help locate sources but are not counted as original experiments.
+I use original studies that experimentally examine methanol synthesis under an
+impurity, contaminant, realistic gas mixture, or pre-poisoned catalyst
+condition. Reviews can help me locate sources, but I do not count them as
+original experiments.
 
 One original publication is counted as one source. If a paper tests several catalysts, impurities, concentrations, or operating conditions, each condition receives its own Experimental Row ID under the same Study ID.
 
 ## Data extraction
 
-For each usable experiment, the extraction records the source, catalyst, impurity, operating conditions, methanol outcome, evidence location, and data-quality assessment. Values that appear only in figures are marked for manual extraction unless they have been deliberately digitized.
+For each usable experiment, I record the source, catalyst, impurity, operating
+conditions, methanol outcome, evidence location, and data-quality assessment.
+Values that appear only in figures are marked for manual extraction unless
+they have been deliberately digitized.
 
 Missing information is not guessed. It is recorded as not reported, not accessible, partial access, or needing manual extraction.
 
@@ -30,17 +41,24 @@ Related reports, theses, conference papers, and journal articles may describe th
 
 ## Catalyst-specific modeling sequence
 
-The project now separates catalyst-specific clean reactor models from
-impurity-response modules. The first catalyst is unsupported In2O3. Its clean
-model must be reproduced and externally validated before a new catalyst or
-impurity response is attached. Numerical parameters are not transferred
-silently between unsupported and supported catalysts.
+I separate a clean-catalyst model from the impurity-response calculation. The
+first clean model is unsupported In2O3. It reproduced its source, but the
+outside-study test showed that it remains source-specific. I therefore cannot
+quietly reuse its numerical parameters for supported In2O3/ZrO2 or attach an
+In2O3/ZrO2 impurity response to it.
 
-## Planned computational analysis
+## How I analyze the models
 
-The verified literature data will later be analyzed with Python. The purpose of the code will be to test whether impurity concentration, catalyst type, and operating conditions can help explain or predict changes in methanol performance.
+I use Python to test whether impurity concentration, catalyst type, and
+operating conditions can help explain or predict changes in methanol
+performance. I begin with transparent calculations and plots before
+considering a fitted model.
 
-The first stage will use summary statistics and graphs to examine the distribution of the data, differences among impurity categories, and the amount of missing information. Baseline and impurity observations will then be converted into comparable numerical outcomes when the metric, unit, catalyst, and operating conditions permit a valid comparison.
+Summary statistics and graphs are used to examine the distribution of the
+data, differences among impurity categories, and missing information.
+Baseline and impurity observations are converted into comparable numerical
+outcomes only when the metric, unit, catalyst, and operating conditions permit
+a valid comparison.
 
 Possible model inputs include:
 

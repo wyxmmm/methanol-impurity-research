@@ -2,6 +2,15 @@
 
 Checkpoint date: 2026-08-03; external-transfer diagnostic updated 2026-08-12
 
+## Plain-language result
+
+I first checked whether the code could reproduce the paper from which the
+equations and parameters came. It could. I then kept those parameters fixed
+and ran 88 conditions collected from six other papers. The program ran every
+condition, but methanol selectivity often differed substantially from the
+measurements. This means the code is reproducible while the numerical model is
+still specific to the Ghosh catalyst rather than a general In2O3 predictor.
+
 ## Result in one sentence
 
 The published unsupported-In2O3 model reproduces the Ghosh catalyst, but a

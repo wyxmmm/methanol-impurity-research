@@ -1,16 +1,35 @@
 # Methanol Impurity Research
 
-This repository contains my ongoing Research project on how impurities in hydrogen, carbon dioxide, and synthesis-gas feeds affect methanol synthesis.
+I started this project to understand how impurities in hydrogen, carbon
+dioxide, and synthesis-gas feeds affect methanol production. My long-term goal
+is to build a model that predicts a clearly defined impurity effect for a
+specific catalyst and range of operating conditions.
 
-## Research question
+## What I am trying to answer
 
 > To what extent can literature-derived impurity concentration, catalyst family, and operating conditions predict methanol performance loss during CO2 hydrogenation and methanol synthesis?
 
-The H2S evidence stage is preserved as a completed no-fit checkpoint. The
-active Catalyst 1 stage now focuses on externally validating a clean-reactor
-kinetic model for unsupported In2O3 before adding another catalyst or impurity.
+In simpler terms, I am asking how contaminants in the gases used to make
+methanol reduce catalyst performance, and whether published experiments are
+consistent enough to predict that loss. Possible model inputs include the
+impurity and its concentration, catalyst composition, temperature, pressure,
+feed ratio, space velocity, exposure time, and how the impurity was
+introduced. Possible outputs include methanol yield, selectivity,
+productivity, formation rate, and catalyst deactivation. These outputs measure
+different things and cannot automatically be combined.
 
-## Current data
+The project focuses on experiments that actually measure methanol synthesis.
+Mechanism studies and realistic gas-stream measurements can provide context,
+but they are kept separate when they do not report a comparable methanol
+outcome.
+
+The H2S evidence stage is preserved as a completed no-fit checkpoint. I then
+reproduced a published clean-reactor model for unsupported In2O3 and tested it
+against outside studies. That model remains source-specific. Both stages are
+supporting steps toward the main goal: a catalyst-matched impurity model that
+predicts a clearly defined change in methanol performance.
+
+## What I have collected
 
 - `data/main_data.tsv` contains 301 extracted experimental conditions from 14 studies.
 - `data/source_list.tsv` describes the 14 studies already extracted.
@@ -23,7 +42,7 @@ One row in `main_data.tsv` represents one experimental condition. Repeated rows 
 
 Important: `data/pilot/sulfur_stage2_verified.csv` is preserved as a legacy Stage-2 input. Its T1-001 H2S rows are known reconciliation errors; `src/h2s_dataset_builder.py` quarantines them and replaces only the supported 4 h record. Do not use that CSV directly as validated H2S evidence.
 
-## H2S evidence engine
+## What happened with the first H2S model
 
 The H2S stage is implemented in:
 
@@ -32,15 +51,17 @@ The H2S stage is implemented in:
 - `config/h2s_model_spec.json` - defines the eligibility and universal-fit gate;
 - `tests/` - verifies corrections, evidence separation, equations, and the no-fit decision.
 
-The audited literature currently provides only one strict continuous-H2S commercial-Cu/ZnO/Al2O3 methanol-synthesis observation. The universal fit gate therefore fails, and the code intentionally does not fit a general curve. It preserves source-specific calculations while preventing COx proxies or methanol-decomposition data from being presented as universal methanol-synthesis predictions.
+The strict dataset currently has only one compatible continuous-H2S
+commercial-Cu/ZnO/Al2O3 methanol-synthesis observation. That is not enough to
+fit and test a general curve. The code therefore refuses to make a universal
+prediction and keeps the useful source-specific calculations separate. This
+was a no-fit result, but it helped define what evidence a later impurity model
+actually needs.
 
-See:
+The complete H2S evidence rules, result, implemented source-specific tools,
+and limitations are consolidated in `docs/h2s_model_spec.md`.
 
-- `docs/h2s_model_spec.md`
-- `docs/h2s_phase5_evidence_engine.md`
-- `docs/h2s_paper_ready_explanation.md`
-
-## Catalyst 1: unsupported In2O3
+## Why I studied clean unsupported In2O3
 
 The first catalyst-specific reactor model reproduces Ghosh et al. (2021), DOI
 `10.1016/j.cej.2021.129120`. It integrates three reversible reactions in an
@@ -64,6 +85,11 @@ diagnostic checkpoint, not as proof that the published parameters are a
 general unsupported-In2O3 model. The principal transfer weakness is product
 branching/selectivity rather than numerical solver failure.
 
+In this context, one "condition" is one reported combination of catalyst,
+temperature, pressure, feed ratio, flow or space velocity, and measured
+outcome. The 88 conditions are repeated settings collected from six papers;
+they are not 88 independent studies.
+
 Key files:
 
 - `src/ghosh_in2o3_pfr.py` - published LHHW rates and PFR balances;
@@ -80,7 +106,7 @@ Key files:
 - `docs/model_equation_registry.md` - controlled record of the equations,
   units, provenance, domains, and implementation status used by the code.
 
-## Run
+## How to reproduce the calculations
 
 ```powershell
 python -m pip install -r requirements.txt
@@ -105,7 +131,22 @@ src/     Reproducible analysis code
 tests/   Automated validation and integrity checks
 ```
 
-## Current limitations
+## How I used AI and coding tools
+
+I used OpenAI Codex extensively as a research and coding assistant. It helped
+me organize literature, support data extraction from papers I supplied, draft
+and revise Python code, run tests, find inconsistencies, and prepare early
+documentation. Codex generated or revised substantial parts of the initial
+code and writing under my direction.
+
+I do not treat AI output as a scientific source. Numerical claims in this
+repository should trace back to a cited paper, a committed data table, or a
+reproducible calculation. I am reviewing the concepts and rewriting the main
+explanations so I can understand and defend the final work. I also discuss the
+scientific direction with my mentor. Any eventual paper will follow the AI
+disclosure rules of the journal or competition where it is submitted.
+
+## What this project cannot claim yet
 
 - The H2S core is too small for a defensible universal prediction model.
 - The locked unsupported-In2O3 model runs across six external studies, but its

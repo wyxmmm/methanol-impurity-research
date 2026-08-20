@@ -28,14 +28,14 @@ DATA_PATH = (
     ROOT
     / "data"
     / "curated"
-    / "in2o3_zro2"
+    / "unsupported_in2o3"
     / "ghosh_2021_unsupported_in2o3_kinetics.csv"
 )
 VALIDATION_DATA_PATH = (
     ROOT
     / "data"
     / "curated"
-    / "in2o3_zro2"
+    / "unsupported_in2o3"
     / "ghosh_2021_validation_inputs.csv"
 )
 R_GAS = 8.31446261815324  # J mol-1 K-1

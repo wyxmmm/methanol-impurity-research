@@ -1,6 +1,10 @@
 # Research Log
 
-This log begins with the reorganization of the project. Earlier work was completed outside this repository and is summarized here instead of being assigned invented dates.
+I use this log to record what I did, what the evidence allowed me to conclude,
+what failed, and why the direction changed. Earlier work was completed outside
+this repository and is summarized here instead of being assigned invented
+dates. AI assistance is described in the README; this log focuses on the
+scientific decisions and results.
 
 ## 2026-07-19
 
