@@ -2,6 +2,14 @@
 
 Checkpoint date: 2026-08-03; external-evidence audit updated 2026-08-12
 
+## Why I made this audit
+
+Before trusting the program, I needed to separate values stated by Ghosh from
+choices required to reproduce the model in code. This document records the
+reported reactor conditions, equations and parameters, missing details, and
+the assumptions I tested. It is a traceability record, not a claim that every
+outside In2O3 catalyst is equivalent to the Ghosh catalyst.
+
 ## Scope and source identity
 
 This audit covers the single-site LHHW/PFR model in Ghosh et al. (2021),

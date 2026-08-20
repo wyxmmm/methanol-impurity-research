@@ -1,5 +1,24 @@
 # Model Equation Registry
 
+## How to read this document
+
+This is the most technical document in the repository. I use it to keep track
+of every equation that affects a reported result, where the equation came
+from, and where it is allowed to be used.
+
+The overall calculation is simpler than the number of equations makes it
+look. Operating conditions are converted into inlet flows and partial
+pressures. Published rate equations estimate how quickly methanol, CO, and
+CH4 form. A plug-flow material balance follows those changes through the
+catalyst bed. The program then calculates conversion, selectivity, yield, and
+prediction error. A future impurity layer would reduce or alter the clean
+output using data from the same catalyst family.
+
+The labels below distinguish equations copied from published models,
+transparent calculations introduced in this project, source-specific sulfur
+equations, and ideas that have not been implemented. A candidate equation is
+not a result.
+
 ## Purpose and status labels
 
 This is the controlled record of the mathematical equations used in this

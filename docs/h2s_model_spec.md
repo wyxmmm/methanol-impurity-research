@@ -119,4 +119,95 @@ A cross-study core model will be fitted only if the final audited dataset has al
 
 If the evidence does not meet this gate, the correct deliverable is not a weak universal regression. It is a validated evidence engine containing source-specific kinetic calculations, bounded scenarios, protocol-specific comparisons, and an exact list of measurements needed to unlock the next model.
 
+## Current evidence and model decision
+
+The audit produced 75 curated observations and 38 source-specific kinetic
+records. However, only one observation satisfies the strict core definition:
+continuous H2S exposure over a commercial Cu/ZnO/Al2O3 catalyst during
+methanol synthesis with a usable clean baseline.
+
+That observation used 8.1 ppm H2S at 240 C and 20 bar. The catalyst retained
+approximately 90% normalized methanol activity after 30 hours. It represents
+one study, one experimental condition, and one H2S concentration.
+
+| Universal-fit requirement | Required | Available |
+|---|---:|---:|
+| Independent studies | 4 | 1 |
+| Independent experimental units | 20 | 1 |
+| H2S concentrations | 4 | 1 |
+| Studies with usable clean baselines | 2 | 1 |
+
+The universal-fit gate therefore fails. No universal H2S curve was fitted.
+This is a scientific evidence limitation, not a software failure. Holding out
+the sole eligible study would leave no evidence for training a model.
+
+## Implemented source-specific tools
+
+`src/h2s_evidence_engine.py` preserves five calculations without treating
+them as one interchangeable dataset:
+
+| Tool | Calculation | Allowed use |
+|---|---|---|
+| `prasnikar_cza_endpoint` | Interpolates normalized methanol activity between 0 and 30 h | Only at the reported 8.1 ppm, 240 C, 20 bar conditions |
+| `wood_c79_exponential` | Applies `A(t) = exp(-k_obs t)` using a reported decay rate | Only for the exact 1.6, 3.2, or 33 ppm C79-1 runs |
+| `he_matched_cox_proxy` | Compares digitized H2S and clean COx-conversion traces | A COx proxy, not methanol productivity |
+| `ying_empirical_decomposition` | Interpolates reported methanol-decomposition activity | Only within the reported 211 ppm, 260 C time series |
+| `ying_intrinsic_decomposition` | Evaluates Ying's fitted deactivation equation | Methanol decomposition, not methanol synthesis |
+
+Each tool checks its own experimental domain and rejects unsupported inputs.
+The Prašnikar interpolation, for example, cannot vary H2S concentration or
+predict beyond 30 hours. Wood's reported rates are not used to invent a new
+concentration-response curve. He remains labeled as a COx-conversion proxy,
+and both Ying calculations remain labeled as methanol-decomposition evidence.
+
+For Ying's reported 260 C and 211 ppm series, the intrinsic equation
+reproduces the seven source activity values with a within-source MAE of about
+0.0595 and RMSE of 0.0657. This checks the implementation of that source's
+equation; it does not validate transfer to methanol synthesis.
+
+## Uncertainty and interpretation
+
+Reported uncertainty is preserved when available. Missing error bars remain
+missing. Approximate and digitized values keep those labels. The He trace
+includes a digitization-sensitivity range, which is not presented as a
+statistical confidence interval. No confidence interval is invented from the
+spread of incompatible experiments.
+
+The defensible conclusion is:
+
+> The available literature was sufficient to build source-specific H2S
+> deactivation calculations and an auditable evidence structure, but
+> insufficient to validate a universal cross-study methanol-activity model.
+
+The project must not claim that the current engine predicts methanol loss for
+any Cu/ZnO/Al2O3 catalyst at any H2S concentration.
+
+## Running the evidence engine
+
+Rebuild the generated H2S results with:
+
+```powershell
+python -m src.h2s_evidence_engine
+```
+
+Query the bounded commercial-CZA endpoint interpolation with:
+
+```powershell
+python -m src.h2s_evidence_engine `
+  --model prasnikar_cza_endpoint `
+  --h2s-ppm 8.1 `
+  --time-h 20
+```
+
+The estimate is approximately 0.933 activity retention. It means only an
+endpoint-anchored interpolation under that source's exact conditions.
+
+## Evidence needed for a future model
+
+The most useful new experiments would measure the same catalyst at several
+H2S concentrations, several exposure times, fixed operating conditions,
+matched clean-aging controls, methanol rate or yield, and replicate
+uncertainty. Multiple independent studies would then be needed for
+whole-study validation.
+
 The machine-readable specification is `config/h2s_model_spec.json`.
